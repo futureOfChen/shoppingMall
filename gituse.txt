@@ -1,0 +1,6 @@
+一, 直接使用 vue-cli 初始化项目 , 使用npm instll 下载依赖项, 最后通过 npm run dev 来启动项目
+二, 在github中创建一个仓库, 在当前的项目中使用 git init 初始化为git的仓库, 
+    然后通过 git remote add origin <项目的github地址> 将本地仓库与远程仓库进行关联
+三, git push origin master 将本地的master分支推送到远程的master分支 ; 
+    如果推送失败 ,则需要使用 git pull origin master --allow-unrelated-histories ,先从远程仓库拉取分支, 与本地分支合并 ,然后就可以推送
+四, 在本地创建 dev 分支 , 然后 git push origin dev 将本地分支推送到远程仓库分支, 如果远程分支不存在则直接创建
