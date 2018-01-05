@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # shoppingmall
 
 > shoppingmall project
@@ -19,3 +20,6 @@ npm run build --report
 ```
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+=======
+# shoppingMall
+>>>>>>> 10cd960a421d959f1ecbb79567b4188dbc69bf0c
