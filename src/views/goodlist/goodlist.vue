@@ -39,49 +39,12 @@
           <div class="accessory-list-wrap">
             <div class="accessory-list col-4">
               <ul>
-                <li>
+                <li v-for="(good ,index) in goodslist" :key="index">
                   <div class="pic">
-                    <a href="#"><img src="./1.jpg" alt=""></a>
-                  </div>
+                    <a href="#"><img :src="'/static/'+good.productImg" alt=""></a>                  </div>
                   <div class="main">
-                    <div class="name">XX</div>
-                    <div class="price">999</div>
-                    <div class="btn-area">
-                      <a href="javascript:;" class="btn btn--m">加入购物车</a>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="pic">
-                    <a href="#"><img src="./2.jpg" alt=""></a>
-                  </div>
-                  <div class="main">
-                    <div class="name">XX</div>
-                    <div class="price">1000</div>
-                    <div class="btn-area">
-                      <a href="javascript:;" class="btn btn--m">加入购物车</a>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="pic">
-                    <a href="#"><img src="./3.jpg" alt=""></a>
-                  </div>
-                  <div class="main">
-                    <div class="name">XX</div>
-                    <div class="price">500</div>
-                    <div class="btn-area">
-                      <a href="javascript:;" class="btn btn--m">加入购物车</a>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="pic">
-                    <a href="#"><img src="./4.jpg" alt=""></a>
-                  </div>
-                  <div class="main">
-                    <div class="name">XX</div>
-                    <div class="price">2499</div>
+                    <div class="name">{{good.productName}}</div>
+                    <div class="price">{{good.productPrice}}</div>
                     <div class="btn-area">
                       <a href="javascript:;" class="btn btn--m">加入购物车</a>
                     </div>
@@ -106,7 +69,7 @@ import VNavbread from '../../components/navbread/navbread'
  export default {
    data() {
      return {
-
+       goodslist:[]
      }
    },
    components: {
@@ -114,7 +77,22 @@ import VNavbread from '../../components/navbread/navbread'
      VFooter,
      VNavbread
 
-   }
+   },
+  mounted(){
+    this.getGoodslist();
+  },
+  methods:{
+    getGoodslist(){
+      this.$http.get('api/test')
+        .then(res => {
+          let data = res.data.goods ;
+          if( +data.status === 0){
+            this.goodslist = data.result;
+            console.log(this.goodslist)
+          }
+        })
+    }
+  }
  }
 </script>
 
