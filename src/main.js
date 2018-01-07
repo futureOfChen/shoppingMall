@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import '../static/css/reset.css'
 
 Vue.config.productionTip = false
 
@@ -12,4 +13,4 @@ new Vue({
   router,
   template: '<App/>',
   components: { App }
-})
+});

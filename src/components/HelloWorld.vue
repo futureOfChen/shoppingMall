@@ -6,7 +6,8 @@
       :count='pCount'
       @increase='inc' 
       @decrease='de'></v-counter>
-    
+    <router-link to="/1/2/nice?name=apple&tip=be better">跳转商品列表页</router-link>  
+    <router-link to="/goodsinfo">跳转商品详情页</router-link>  
   </div>
 </template>
 
