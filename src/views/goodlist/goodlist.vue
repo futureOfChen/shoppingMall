@@ -12,25 +12,22 @@
           <span class="sortby">Sort by:</span>
           <a href="javascript:void(0)" class="default cur">Default</a>
           <a href="javascript:void(0)" class="price">Price <svg class="icon icon-arrow-short"><use xlink:href="#icon-arrow-short"></use></svg></a>
-          <a href="javascript:void(0)" class="filterby stopPop">Filter by</a>
+          <a href="javascript:void(0)" 
+            class="filterby stopPop" 
+            @click="showFilterPop">Filter by</a>
         </div>
         <div class="accessory-result">
           <!-- filter -->
-          <div class="filter stopPop" id="filter">
+          <div class="filter stopPop" id="filter" :class="{'filterby-show':filterBy}">
             <dl class="filter-price">
               <dt>Price:</dt>
-              <dd><a href="javascript:void(0)">All</a></dd>
-              <dd>
-                <a href="javascript:void(0)">0 - 100</a>
-              </dd>
-              <dd>
-                <a href="javascript:void(0)">100 - 500</a>
-              </dd>
-              <dd>
-                <a href="javascript:void(0)">500 - 1000</a>
-              </dd>
-              <dd>
-                <a href="javascript:void(0)">1000 - 2000</a>
+              <dd><a href="javascript:void(0)" 
+                :class="{'cur':curPriceFilterIndex === 0}"
+                @click="setCurPriceFilter(0)">All</a></dd>
+              <dd v-for="(item,index) in priceFilterList" :key="index">
+                <a href="javascript:void(0)" 
+                :class="{'cur':curPriceFilterIndex === index+1}"
+                @click="setCurPriceFilter(index+1)">{{item.startPrice}} - {{item.endPrice}}</a>
               </dd>
             </dl>
           </div>
@@ -41,7 +38,7 @@
               <ul>
                 <li v-for="(good ,index) in goodslist" :key="index">
                   <div class="pic">
-                    <a href="#"><img :src="'/static/'+good.productImg" alt=""></a>                  </div>
+                    <a href="#"><img v-lazy="'/static/'+good.productImg" alt=""></a>                  </div>
                   <div class="main">
                     <div class="name">{{good.productName}}</div>
                     <div class="price">{{good.productPrice}}</div>
@@ -51,12 +48,13 @@
                   </div>
                 </li>
               </ul>
+
             </div>
           </div>
         </div>
       </div>
     </div>
-
+    <div class="md-overlay " v-show="overlayFlag" @click="hideOverlay"></div>
     <v-footer></v-footer>
 
  </div>
@@ -69,7 +67,28 @@ import VNavbread from '../../components/navbread/navbread'
  export default {
    data() {
      return {
-       goodslist:[]
+       goodslist:[],
+       priceFilterList:[
+         {
+           startPrice: 0,
+           endPrice: 100
+         },
+         {
+           startPrice: 100,
+           endPrice: 500
+         },
+         {
+           startPrice: 500,
+           endPrice: 1000
+         },
+         {
+           startPrice: 1000,
+           endPrice: 2000
+         },
+       ],
+       curPriceFilterIndex: 0,
+       filterBy: false,
+       overlayFlag: false
      }
    },
    components: {
@@ -88,9 +107,22 @@ import VNavbread from '../../components/navbread/navbread'
           let data = res.data.goods ;
           if( +data.status === 0){
             this.goodslist = data.result;
-            console.log(this.goodslist)
+            // console.log(this.goodslist)
           }
         })
+    },
+    setCurPriceFilter(index) {
+      this.curPriceFilterIndex = index;
+      this.overlayFlag = false;
+      this.filterBy = false;
+    },
+    showFilterPop(){
+      this.filterBy = true;
+      this.overlayFlag = true;
+    },
+    hideOverlay(){
+      this.filterBy = false;
+      this.overlayFlag = false;
     }
   }
  }
