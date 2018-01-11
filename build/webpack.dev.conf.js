@@ -18,6 +18,9 @@ const express = require('express');
 const app = express();
 const apiRouter = express.Router();
 
+// 加载mongo客户端
+const client = require('../mongo/client')
+
 //读取模拟的数据
 const goods = require('../data/goods.json');
 
@@ -55,10 +58,10 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       poll: config.dev.poll,
     },
     before(app) {
-      app.get('/api/test',function(req,res){
-        res.json({
-          goods
-        })
+      app.get('/api/getGoodslist',function(req,res){
+        client.getGoodslist ( (result) => {
+          res.json(result);
+        })  
       })
     }
   },

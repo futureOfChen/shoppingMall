@@ -38,7 +38,7 @@
               <ul>
                 <li v-for="(good ,index) in goodslist" :key="index">
                   <div class="pic">
-                    <a href="#"><img v-lazy="'/static/'+good.productImg" alt=""></a>                  </div>
+                    <a href="#"><img v-lazy="'/static/'+good.productImage" alt=""></a>                  </div>
                   <div class="main">
                     <div class="name">{{good.productName}}</div>
                     <div class="price">{{good.productPrice}}</div>
@@ -102,13 +102,9 @@ import VNavbread from '../../components/navbread/navbread'
   },
   methods:{
     getGoodslist(){
-      this.$http.get('api/test')
+      this.$http.get('api/getGoodslist')
         .then(res => {
-          let data = res.data.goods ;
-          if( +data.status === 0){
-            this.goodslist = data.result;
-            // console.log(this.goodslist)
-          }
+          this.goodslist = res.data;
         })
     },
     setCurPriceFilter(index) {
