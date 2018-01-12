@@ -18,6 +18,9 @@ const express = require('express');
 const app = express();
 const apiRouter = express.Router();
 
+const multipart  = require('connect-multiparty');
+const multipartMiddleware = multipart();
+
 // 加载mongo客户端
 const client = require('../mongo/client')
 
@@ -62,6 +65,12 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         client.getGoodslist ( (result) => {
           res.json(result);
         })  
+      }),
+      app.post('/api/addToCart',multipartMiddleware,function(req,res) {
+        console.log(req.body);
+        res.json({
+          key:'ok'
+        })
       })
     }
   },

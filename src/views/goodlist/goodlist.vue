@@ -42,14 +42,14 @@
           <div class="accessory-list-wrap">
             <div class="accessory-list col-4">
               <ul>
-                <li v-for="(good ,index) in fixedGoodslist" :key="index">
+                <li v-for="(goods ,index) in fixedGoodslist" :key="index">
                   <div class="pic">
-                    <a href="#"><img v-lazy="'/static/'+good.productImage" alt=""></a>                  </div>
+                    <a href="#"><img v-lazy="'/static/'+goods.productImage" alt=""></a>                  </div>
                   <div class="main">
-                    <div class="name">{{good.productName}}</div>
-                    <div class="price">{{good.salePrice}}</div>
+                    <div class="name">{{goods.productName}}</div>
+                    <div class="price">{{goods.salePrice}}</div>
                     <div class="btn-area">
-                      <a href="javascript:;" class="btn btn--m">加入购物车</a>
+                      <a href="javascript:;" class="btn btn--m" @click="addToCart(goods)">加入购物车</a>
                     </div>
                   </div>
                 </li>
@@ -138,6 +138,16 @@ import utils from '../../assets/js/utils'
     },
     changeSortType() {
       this.sortByDefault = !this.sortByDefault;
+    },
+    addToCart( goods) {
+     let formData = new FormData();
+     formData.append('goods',JSON.stringify(goods));
+     this.$http.post('api/addToCart',formData)
+      .then( (res) => {
+        console.log(res);
+      }, (err) => {
+        console.log(err);
+      })
     }
   },
   computed:{
