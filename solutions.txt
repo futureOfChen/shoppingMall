@@ -1,0 +1,26 @@
+axios.post 请求,后台获取不到数据的解决方案:
+
+1. 在vue中 使用 FormData 包装数据
+    let formData = new FormData();
+    formData.append('username', 'jack');
+    formData.append('psw', 'ok');
+
+    this.$http.post('api/two',formData
+      ).then(res => {
+        console.log(res)
+      },
+      err => {
+        console.log(err)
+    })
+
+2. 在服务器端,使用connect-multiparty 插件
+    const multipart = require('connect-multiparty');
+    const mulitipartMiddleware = multipart();
+
+    app.post('/api/two',mulitipartMiddleware,function(req,res){
+       
+        console.log(req.body);
+        res.json({
+          key:'two'
+        })
+      })
