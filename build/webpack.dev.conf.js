@@ -67,10 +67,17 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         })  
       }),
       app.post('/api/addToCart',multipartMiddleware,function(req,res) {
-        console.log(req.body);
-        res.json({
-          key:'ok'
+        // console.log(req.body);
+        // console.log( typeof req.body);
+        let goods = req.body.goods;
+        console.log(typeof goods);
+        client.addToCart(JSON.parse(goods),function(result){
+          console.log(result);
+          res.json({
+            key:'ok'
+          })
         })
+        
       })
     }
   },
