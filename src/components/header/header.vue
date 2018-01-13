@@ -1,5 +1,31 @@
 <template>
     <div class="header">
+
+      <div class="login" v-show="isLoginShow">
+          <div class="mask">  
+              <div class="area">
+                  <div class="close"><span @click="closeLoginPage">X</span></div>   
+                  <div class="tips" v-show="isTipShow">您输入的用户名或密码有错误!!!</div>
+                  <div class="item">
+                      <span>用户名</span>
+                      <input type="text" 
+                        placeholder="请输入用户名"
+                        v-model="userName">
+                  </div>
+                  
+                  <div class="item">
+                      <span>密码</span>
+                      <input type="text" 
+                        placeholder="请输入密码"
+                        v-model="userPwd">
+                  </div>
+                  <button @click="login" class="confirm">确定</button>
+
+              </div>
+          </div>
+      </div>
+
+
        <header class="header">
         <symbol id="icon-cart" viewBox="0 0 38 32">
           <title>cart</title>
@@ -17,8 +43,10 @@
             <div class="navbar-menu-container">
               <!--<a href="/" class="navbar-link">我的账户</a>-->
               <span class="navbar-link"></span>
-              <a href="javascript:void(0)" class="navbar-link">Login</a>
-              <a href="javascript:void(0)" class="navbar-link">Logout</a>
+              <a href="javascript:void(0)" class="navbar-link" @click="showLoginPage" v-show="!hasLogin">Login</a>
+              <a href="javascript:void(0)" class="navbar-link"  v-show="hasLogin">{{ loginUsername}}</a>
+              
+              <a href="javascript:void(0)" class="navbar-link" @click="logOut">Logout</a>
               <div class="navbar-cart-container">
                 <span class="navbar-cart-count"></span>
                 <a class="navbar-link navbar-cart-link" href="/#/cart">
@@ -30,7 +58,7 @@
             </div>
           </div>
         </div>
-      </header> 
+       </header> 
     </div>
 </template>
 
@@ -39,10 +67,111 @@
  export default {
    data() {
      return {
+       userName:'',
+       userPwd:'',
+       isLoginShow:false,
+       isTipShow:false,
+       hasLogin:false,
+       loginUsername:''
+     }
+   },
+   methods: {
+     showLoginPage(){
+       //让登录页面显示       
+       this.isLoginShow = true;
+     },
+     login(){
+       let formData = new FormData();
+       formData.append('username',this.userName);
+       formData.append('userpwd',this.userPwd);
+      //  向后台发送请求
+      this.$http.post('users/login',formData).then( (result) => {
+        let res = result.data;
+        if(res.status === 0) {
+          this.hasLogin = true;
+          this.loginUsername = res.result.username;
+          this.isLoginShow = false;
+        }else {
+          this.isTipShow = true;
+        }
+      } , (err) => {
+        console.log(err);
+      } )
+     },
+     closeLoginPage(){
+       this.isLoginShow = false;
+     },
+     logOut() {
 
+       if(this.hasLogin){
+        this.$http.post('users/logout').then( res => {
+            // console.log(res.data);
+            if( res.data.status === 0 ) {
+              this.hasLogin = false;
+              this.loginUsername = '';
+              alert('用户已注销')
+            }
+          } )
+        } 
      }
 
-   }
+
+    }
  }
 </script>
+
+<style scoped lang='less'>
+
+    .login {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        z-index: 100;
+        .mask {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.3);
+            .area {
+                position: absolute;
+                top: 50%;
+                left:50%;
+                transform: translate3d(-50%,-50%,0);
+                background-color: #bbb;
+                padding: 26px 18px;
+                .close {
+                  padding:5px 6px;
+                  text-align: right;
+                  span{
+                    background-color: #aaa;
+                    cursor: pointer;
+                  }
+                }
+                .tips {
+                    padding-bottom: 15px;
+                    color: red;
+                    font-size: 16px;
+                }
+                .item {
+                    padding: 5px;
+                    span {
+                        display: inline-block;
+                        width: 80px;
+                        color:red;
+                    }
+                    input {
+                        height:30px;
+                    }
+                }
+                .confirm {
+                    padding: 5px 0;
+                    color: white;
+                    width: 100%;
+                    background-color: rgb(98, 90, 219);
+                }
+            }
+        }
+    }
+ 
+</style>
 

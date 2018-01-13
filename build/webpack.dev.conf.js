@@ -18,6 +18,8 @@ const express = require('express');
 const app = express();
 const apiRouter = express.Router();
 
+const cookieParser = require('cookie-parser');
+
 const multipart  = require('connect-multiparty');
 const multipartMiddleware = multipart();
 
@@ -28,6 +30,7 @@ const client = require('../mongo/client')
 const goods = require('../data/goods.json');
 
 app.use('/api',apiRouter);
+app.use(cookieParser);
 
 
 const devWebpackConfig = merge(baseWebpackConfig, {
@@ -77,8 +80,49 @@ const devWebpackConfig = merge(baseWebpackConfig, {
             key:'ok'
           })
         })
-        
+      }),
+      app.post('/users/login',multipartMiddleware,function(req,res) {
+        let data = req.body;
+        let username = data.username;
+        let userpwd = data.userpwd;
+        if( username === 'jim' && userpwd === '999'){
+
+          res.cookie('userId',10001,{
+            path:'/',
+            maxAge:1000*60*60
+          })
+
+          res.json({
+            status:0,
+            msg:'',
+            result:{
+              username
+            }
+          })
+
+        }else {
+          res.json({
+            status:1,
+            msg:'',
+            result:{
+            }
+          })
+        }
+      }),
+      app.post('/users/logout',multipartMiddleware,function(req,res){
+          res.cookie('userId','',{
+            path:'/',
+            maxAge:-1
+          });
+          res.json({
+            status:0,
+            msg:'',
+            result:''
+          })
       })
+
+
+      
     }
   },
   plugins: [

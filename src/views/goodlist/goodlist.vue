@@ -1,6 +1,7 @@
 <template>
  <div class="goodlist">
-    <v-header></v-header>
+    
+    <v-header ></v-header>
 
     <v-navbread>
       <span>Goods</span>
@@ -98,13 +99,15 @@ import utils from '../../assets/js/utils'
        overlayFlag: false,
        sortByDefault:true,
        startPrice:0,
-       endPrice:0
+       endPrice:0,
+       isLoginShow:false
      }
    },
    components: {
      VHeader,
      VFooter,
      VNavbread
+     
 
    },
   mounted(){
